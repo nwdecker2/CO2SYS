@@ -1,5 +1,5 @@
 k1k2 
-##"l" for using K1 and K2 from Lueker et al. (2000)
+"l" for using K1 and K2 from Lueker et al. (2000)
   ## T (2c - 35c)
   ## S (19 - 43)
 
