@@ -48,24 +48,34 @@ kf
 "dg" for using Kf from Dickson and Riley (1979 in Dickson and Goyet, 1994).
   ## T (0c - 45c)
   ## S (0 -45)
+## Why
+  ## Better S and T range
 
 
 ks
 "d" for using Ks from Dickon (1990) 
   ## T (0c - 45c)
   ## S (5 - 45)
+## Why
+  ## Better S and T ranges 
 
-"k" for using Ks from Khoo et al. (1977)
+## "k" for using Ks from Khoo et al. (1977)
   ## T (5 - 40)
   ## S (20 - 45)
 
 
 pHscale
 "T" for the total scale 
-"F" for the free scale
-"SWS" for using the seawater scale
+## Why
+  ## 
+
+## "F" for the free scale
+## "SWS" for using the seawater scale
 
 
 b
 "l10" for the Lee et al. (2010) formulation
+## Why
+  ##
+
 ## "u74" for the Uppstrom (1974) formulation 
