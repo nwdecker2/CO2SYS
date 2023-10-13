@@ -15,7 +15,7 @@ k1k2
   ## T (1c - 50c)
   ## S (0.1 - 50)
 
-## "mp2" from Mojica Prieto et al. (2002)
+ "mp2" from Mojica Prieto et al. (2002)
   ## T (0c - 45c)
   ## S (5 to 42)
 
@@ -68,4 +68,4 @@ pHscale
 
 b
 "l10" for the Lee et al. (2010) formulation
-"u74" for the Uppstrom (1974) formulation 
+## "u74" for the Uppstrom (1974) formulation 
