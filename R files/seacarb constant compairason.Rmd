@@ -228,7 +228,7 @@ baysyswaters %>%
   theme_classic()
 ```
 
-
+The calculated data from each instance on the same chart
 ```{r, echo = FALSE}
 ggplot() +
   geom_smooth(data = baysysleuker, 
