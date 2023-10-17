@@ -23,7 +23,7 @@ k1k2
   ## T (-6c - 25c)
   ## S (33 to 100)
 
-## "r" from Roy et al. (1993)
+  "r" from Roy et al. (1993)
   ## T (0c - 45c)
   ## S (5 to 45) 
 
@@ -53,7 +53,7 @@ kf
 
 
 ks
-"d" for using Ks from Dickon (1990) 
+"d" for using Ks from Dickson (1990) 
   ## T (0c - 45c)
   ## S (5 - 45)
 ## Why
