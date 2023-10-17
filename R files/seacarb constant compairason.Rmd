@@ -50,11 +50,11 @@ baysysleuker <- carb(flag = "15",
   clean_names()
 
 baysysleuker %>% 
-  ggplot(aes(x = omega_calcite, y = omega_aragonite)) +
+  ggplot(aes(x = t, y = p_co2insitu)) +
   geom_smooth(method = "lm", colour = "red", linewidth = 0.75) +
   geom_point() +
-  xlab("Omega Calcite") +
-  ylab("Omega Aragonite") +
+  xlab("Temperature (c)") +
+  ylab("pco2 (in-situ)") +
   theme_classic()
 ```
 
@@ -84,11 +84,11 @@ baysysmillero2006 <- carb(flag = "15",
   clean_names()
 
 baysysmillero2006 %>% 
-  ggplot(aes(x = omega_calcite, y = omega_aragonite)) +
+  ggplot(aes(x = t, y = p_co2insitu)) +
   geom_smooth(method = "lm", colour = "orange", linewidth = 0.75) +
   geom_point() +
-  xlab("Omega Calcite") +
-  ylab("Omega Aragonite") +
+  xlab("Temperature (c)") +
+  ylab("pco2 (in-situ)") +
   theme_classic()
 ```
 
@@ -118,11 +118,11 @@ baysysmillero2010 <- carb(flag = "15",
   clean_names()
 
 baysysmillero2010 %>% 
-  ggplot(aes(x = omega_calcite, y = omega_aragonite)) +
+  ggplot(aes(x = t, y = p_co2insitu)) +
   geom_smooth(method = "lm", colour = "yellow", linewidth = 0.75) +
   geom_point() +
-  xlab("Omega Calcite") +
-  ylab("Omega Aragonite") +
+  xlab("Temperature (c)") +
+  ylab("pco2 (in-situ)") +
   theme_classic()
 ```
 
@@ -152,11 +152,11 @@ baysysprieto <- carb(flag = "15",
   clean_names()
 
 baysysprieto %>% 
-  ggplot(aes(x = omega_calcite, y = omega_aragonite)) +
+  ggplot(aes(x = t, y = p_co2insitu)) +
   geom_smooth(method = "lm", colour = "green", linewidth = 0.75) +
   geom_point() +
-  xlab("Omega Calcite") +
-  ylab("Omega Aragonite") +
+  xlab("Temperature (c)") +
+  ylab("pco2 (in-situ)") +
   theme_classic()
 ```
 
@@ -186,11 +186,11 @@ baysysroy <- carb(flag = "15",
   clean_names()
 
 baysysroy %>% 
-  ggplot(aes(x = omega_calcite, y = omega_aragonite)) +
+  ggplot(aes(x = t, y = p_co2insitu)) +
   geom_smooth(method = "lm", colour = "blue", linewidth = 0.75) +
   geom_point() +
-  xlab("Omega Calcite") +
-  ylab("Omega Aragonite") +
+  xlab("Temperature (c)") +
+  ylab("pco2 (in-situ)") +
   theme_classic()
 ```
 
@@ -220,11 +220,11 @@ baysyswaters <- carb(flag = "15",
   clean_names()
 
 baysyswaters %>% 
-  ggplot(aes(x = omega_calcite, y = omega_aragonite)) +
+  ggplot(aes(x = t, y = p_co2insitu)) +
   geom_smooth(method = "lm", colour = "purple", linewidth = 0.75) +
   geom_point() +
-  xlab("Omega Calcite") +
-  ylab("Omega Aragonite") +
+  xlab("Temperature (c)") +
+  ylab("pco2 (in-situ)") +
   theme_classic()
 ```
 
@@ -232,36 +232,36 @@ The calculated data from each instance on the same chart
 ```{r, echo = FALSE}
 ggplot() +
   geom_smooth(data = baysysleuker, 
-              aes(x = omega_calcite, y = omega_aragonite),
+              aes(x = t, y = p_co2insitu),
               method = "lm", 
               color = "red", 
-              size = 0.75) +
+              linewidth = 0.75) +
   geom_smooth(data = baysysmillero2006, 
-              aes(x = omega_calcite, y = omega_aragonite),
+              aes(x = t, y = p_co2insitu),
               method = "lm", 
               color = "orange", 
-              size = 0.75) +  
+              linewidth = 0.75) +  
   geom_smooth(data = baysysmillero2010, 
-              aes(x = omega_calcite, y = omega_aragonite),
+              aes(x = t, y = p_co2insitu),
               method = "lm", 
               color = "yellow", 
-              size = 0.75) +
+              linewidth = 0.75) +
   geom_smooth(data = baysysprieto, 
-              aes(x = omega_calcite, y = omega_aragonite),
+              aes(x = t, y = p_co2insitu),
               method = "lm", 
               color = "green", 
-              size = 0.75) +  
+              linewidth = 0.75) +  
   geom_smooth(data = baysysroy, 
-              aes(x = omega_calcite, y = omega_aragonite),
+              aes(x = t, y = p_co2insitu),
               method = "lm", 
               color = "blue", 
-              size = 0.75) +
+              linewidth = 0.75) +
   geom_smooth(data = baysyswaters, 
-              aes(x = omega_calcite, y = omega_aragonite),
+              aes(x = t, y = p_co2insitu),
               method = "lm", 
               color = "purple", 
-              size = 0.75) +
-  xlab("Omega Calcite") +
-  ylab("Omega Aragonite") +
+              linewidth = 0.75) +
+  xlab("Temperature (c)") +
+  ylab("pco2 (in-situ)") +
   theme_classic()
 ```
