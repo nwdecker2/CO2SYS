@@ -46,7 +46,7 @@ T <- Temperature in degrees Celsius
 
 Patm <- Surface atmospheric pressure in atm
 
-P <- Hydrostatic pressure in bar (surface = 0)
+P <- Hydrostatic pressure in bar (surface = 0) 
 
 Pt <- Concentration of total phosphate in mol/kg; set to 0 if NA
 

@@ -32,7 +32,7 @@ baysysleuker <- carb(flag = "15",
                     cleaned_baysys_data$s,
                     cleaned_baysys_data$t,
                     (cleaned_baysys_data$Patm)/101.3, # divided by 101.3 for unit conversion
-                    (cleaned_baysys_data$p)/10, # divided by 10 for unit conversion
+                    (cleaned_baysys_data$p)/10, # divided by 1000 for unit conversion
                     Pt=0,
                     Sit=0,
                     k1k2 = "l", # K1 and K2 from Lueker et al. (2000)
@@ -41,7 +41,7 @@ baysysleuker <- carb(flag = "15",
                     pHscale="T", # Total Scale
                     b="l10", # Lee et al. (2010)
                     warn="n", # Shows warnings if T or S are out of range
-                    eos="teos10", 
+                    eos="eos80", 
                     cleaned_baysys_data$long,
                     cleaned_baysys_data$lat) %>% 
   mutate(sid = cleaned_baysys_data$sid) %>% 
@@ -66,7 +66,7 @@ baysysmillero2006 <- carb(flag = "15",
                     cleaned_baysys_data$s,
                     cleaned_baysys_data$t,
                     (cleaned_baysys_data$Patm)/101.3, # divided by 101.3 for unit conversion
-                    (cleaned_baysys_data$p)/10, # divided by 10 for unit conversion
+                    (cleaned_baysys_data$p)/1000, # divided by 1000 for unit conversion
                     Pt=0,
                     Sit=0,
                     k1k2 = "m06", # K1 and K2 from Millero et al. (2006)
