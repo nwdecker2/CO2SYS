@@ -21,18 +21,23 @@ library(ggplot2)
 load data
 ```{r}
 cleaned_baysys_data <- read_excel(here("BaySys Data/cleaned_baysys_data.xlsx"))
+cleaned_baysys_data <- mutate(cleaned_baysys_data, Patm = (Patm/101.3)) %>% 
+  mutate(p = (p/10)) %>% 
+  mutate(var1 = (var1/1000000)) %>% 
+  mutate(var2 = (var2/1000000))
 ```
+
+Temperature
 
 Lueker et al. (2000)
 ```{r, echo = FALSE}
-
-baysysleuker <- carb(flag = "15",
+baysysluekert <- carb(flag = "15",
                     cleaned_baysys_data$var1,
                     cleaned_baysys_data$var2,
                     cleaned_baysys_data$s,
                     cleaned_baysys_data$t,
-                    (cleaned_baysys_data$Patm)/101.3, # divided by 101.3 for unit conversion
-                    (cleaned_baysys_data$p)/10, # divided by 1000 for unit conversion
+                    cleaned_baysys_data$Patm,
+                    cleaned_baysys_data$p, 
                     Pt=0,
                     Sit=0,
                     k1k2 = "l", # K1 and K2 from Lueker et al. (2000)
@@ -47,9 +52,10 @@ baysysleuker <- carb(flag = "15",
   mutate(sid = cleaned_baysys_data$sid) %>% 
   select(sid, everything()) %>% 
   select(everything(), -flag) %>% 
-  clean_names()
+  clean_names() %>% 
+  filter(t <= 10, p_co2insitu <= 2000)
 
-baysysleuker %>% 
+baysysluekert %>% 
   ggplot(aes(x = t, y = p_co2insitu)) +
   geom_smooth(method = "lm", colour = "red", linewidth = 0.75) +
   geom_point() +
@@ -61,7 +67,7 @@ baysysleuker %>%
 
 Millero et al. (2010)
 ```{r, echo = FALSE}
-baysysmillero2010 <- carb(flag = "15",
+baysysmillero2010t <- carb(flag = "15",
                     cleaned_baysys_data$var1,
                     cleaned_baysys_data$var2,
                     cleaned_baysys_data$s,
@@ -82,11 +88,12 @@ baysysmillero2010 <- carb(flag = "15",
   mutate(sid = cleaned_baysys_data$sid) %>% 
   select(sid, everything()) %>% 
   select(everything(), -flag) %>% 
-  clean_names()
+  clean_names() %>% 
+  filter(t <= 10, p_co2insitu <= 2000)
 
-baysysmillero2010 %>% 
+baysysmillero2010t %>% 
   ggplot(aes(x = t, y = p_co2insitu)) +
-  geom_smooth(method = "lm", colour = "yellow", linewidth = 0.75) +
+  geom_smooth(method = "lm", colour = "blue", linewidth = 0.75) +
   geom_point() +
   xlab("Temperature (c)") +
   ylab("pco2 (in-situ)") +
@@ -94,17 +101,15 @@ baysysmillero2010 %>%
 ```
 
 
-
-
 The calculated data from each instance on the same chart
 ```{r, echo = FALSE}
 ggplot() +
-  geom_smooth(data = baysysleuker, 
+  geom_smooth(data = baysysluekert, 
               aes(x = t, y = p_co2insitu),
               method = "lm", 
               color = "red", 
               linewidth = 0.75) +
-  geom_smooth(data = baysysmillero2010, 
+  geom_smooth(data = baysysmillero2010t, 
               aes(x = t, y = p_co2insitu),
               method = "lm", 
               color = "blue", 
@@ -112,4 +117,96 @@ ggplot() +
   xlab("Temperature (c)") +
   ylab("pco2 (in-situ)") +
   theme_classic()
+```
+
+
+Salinity
+
+
+Lueker et al. (2000)
+```{r echo= FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+baysysluekers <- carb(flag = "15",
+                    cleaned_baysys_data$var1,
+                    cleaned_baysys_data$var2,
+                    cleaned_baysys_data$s,
+                    cleaned_baysys_data$t,
+                    cleaned_baysys_data$Patm,
+                    cleaned_baysys_data$p, 
+                    Pt=0,
+                    Sit=0,
+                    k1k2 = "l", # K1 and K2 from Lueker et al. (2000)
+                    kf="dg", # Dickson and Riley (1979)
+                    ks="d", # Dickson (1990)
+                    pHscale="T", # Total Scale
+                    b="l10", # Lee et al. (2010)
+                    warn="n", # Shows warnings if T or S are out of range
+                    eos="eos80", 
+                    cleaned_baysys_data$long,
+                    cleaned_baysys_data$lat) %>% 
+  mutate(sid = cleaned_baysys_data$sid) %>% 
+  select(sid, everything()) %>% 
+  select(everything(), -flag) %>% 
+  clean_names() %>% 
+  filter(p_co2insitu <= 2000)
+
+baysysluekers %>% 
+  ggplot(aes(x = s, y = p_co2insitu)) +
+  geom_smooth(method = "lm", colour = "red", linewidth = 0.75) +
+  geom_point() +
+  xlab("Salinity (psu)") +
+  ylab("pco2 (in-situ)") +
+  theme_classic()
+```
+
+
+Millero et al. (2010)
+```{r echo= FALSE, message=FALSE, warning=FALSE}
+baysysmillero2010s <- carb(flag = "15",
+                    cleaned_baysys_data$var1,
+                    cleaned_baysys_data$var2,
+                    cleaned_baysys_data$s,
+                    cleaned_baysys_data$t,
+                    (cleaned_baysys_data$Patm)/101.3, # divided by 101.3 for unit conversion
+                    (cleaned_baysys_data$p)/10, # divided by 10 for unit conversion
+                    Pt=0,
+                    Sit=0,
+                    k1k2 = "m10", # K1 and K2 from Millero et al. (2010)
+                    kf="dg", # Dickson and Riley (1979)
+                    ks="d", # Dickson (1990)
+                    pHscale="T", # Total Scale
+                    b="l10", # Lee et al. (2010)
+                    warn="n", # Shows warnings if T or S are out of range
+                    eos="teos10", 
+                    cleaned_baysys_data$long,
+                    cleaned_baysys_data$lat) %>% 
+  mutate(sid = cleaned_baysys_data$sid) %>% 
+  select(sid, everything()) %>% 
+  select(everything(), -flag) %>% 
+  clean_names() %>% 
+  filter(p_co2insitu <= 2000)
+
+baysysmillero2010s %>% 
+  ggplot(aes(x = s, y = p_co2insitu)) +
+  geom_smooth(method = "lm", colour = "blue", linewidth = 0.75) +
+  geom_point() +
+  xlab("Salinity (psu)") +
+  ylab("pco2 (in-situ)") +
+  theme_classic()
+```
+
+
+The calculated data from each instance on the same chart
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot() +
+  geom_smooth(data = baysysluekers, 
+              aes(x = s, y = p_co2insitu),
+              method = "lm", 
+              color = "red") +
+  geom_smooth(data = baysysmillero2010s, 
+              aes(x = s, y = p_co2insitu),
+              method = "lm", 
+              color = "blue") +
+  xlab("Salinity (psu)") +
+  ylab("pco2 (in-situ)") +
+  theme_classic() 
 ```

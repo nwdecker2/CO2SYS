@@ -1,0 +1,155 @@
+---
+title: "CO2SYS vs SeaCarb (temp)"
+author: "Nick Decker"
+date: "2023-10-19"
+output: 
+  html_document
+---
+```{r setup, include= FALSE}
+library(tidyverse)
+library(seacarb)
+library(janitor)
+library(here)
+library(readxl)
+library(writexl)
+library(knitr)
+library(ggplot2)
+```
+
+
+Temperature trials
+
+
+```{r, include=FALSE}
+baysysluekersys <- read_xlsx(here("BaySys Data/cleaned_baysys_data.xlsx"), sheet = "co2sys_l") %>% 
+  clean_names() %>%
+  filter(t_c <= 10, p_co2_out_matm <= 2000)
+
+baysysmillero2010sys <- read_xlsx(here("BaySys Data/cleaned_baysys_data.xlsx"), sheet = "co2sys_m10") %>% 
+  clean_names()%>%
+  filter(t_c <= 10, p_co2_out_matm <= 2000)
+
+cleaned_baysys_data <- read_excel(here("BaySys Data/cleaned_baysys_data.xlsx"))
+
+cleaned_baysys_data <- mutate(cleaned_baysys_data, Patm = (Patm/101.3)) %>% 
+  mutate(p = (p/10)) %>% 
+  mutate(var1 = (var1/1000000)) %>% 
+  mutate(var2 = (var2/1000000))
+
+baysysluekercarb <- carb(flag = "15",
+                    cleaned_baysys_data$var1,
+                    cleaned_baysys_data$var2,
+                    cleaned_baysys_data$s,
+                    cleaned_baysys_data$t,
+                    cleaned_baysys_data$Patm,
+                    cleaned_baysys_data$p, 
+                    Pt=0,
+                    Sit=0,
+                    k1k2 = "l", # K1 and K2 from Lueker et al. (2000)
+                    kf="dg", # Dickson and Riley (1979)
+                    ks="d", # Dickson (1990)
+                    pHscale="T", # Total Scale
+                    b="l10", # Lee et al. (2010)
+                    warn="n", # Shows warnings if T or S are out of range
+                    eos="eos80", 
+                    cleaned_baysys_data$long,
+                    cleaned_baysys_data$lat) %>% 
+  mutate(sid = cleaned_baysys_data$sid) %>% 
+  select(sid, everything()) %>% 
+  select(everything(), -flag) %>% 
+  clean_names() %>% 
+  filter(t <= 10, p_co2insitu <= 2000)
+
+baysysmillero2010carb <- carb(flag = "15",
+                    cleaned_baysys_data$var1,
+                    cleaned_baysys_data$var2,
+                    cleaned_baysys_data$s,
+                    cleaned_baysys_data$t,
+                    (cleaned_baysys_data$Patm)/101.3, # divided by 101.3 for unit conversion
+                    (cleaned_baysys_data$p)/10, # divided by 10 for unit conversion
+                    Pt=0,
+                    Sit=0,
+                    k1k2 = "m10", # K1 and K2 from Millero et al. (2010)
+                    kf="dg", # Dickson and Riley (1979)
+                    ks="d", # Dickson (1990)
+                    pHscale="T", # Total Scale
+                    b="l10", # Lee et al. (2010)
+                    warn="n", # Shows warnings if T or S are out of range
+                    eos="teos10", 
+                    cleaned_baysys_data$long,
+                    cleaned_baysys_data$lat) %>% 
+  mutate(sid = cleaned_baysys_data$sid) %>% 
+  select(sid, everything()) %>% 
+  select(everything(), -flag) %>% 
+  clean_names() %>% 
+  filter(t <= 10, p_co2insitu <= 2000)
+```
+
+
+Lueker v Lueker
+```{r, echo=FALSE}
+ggplot() +
+  geom_smooth(data = baysysluekercarb, 
+              aes(x = t, y = p_co2insitu),
+              method = "lm", 
+              color = "red", 
+              linewidth = 0.75) +
+  geom_smooth(data = baysysluekersys, 
+              aes(x = t_c, y = p_co2_out_matm),
+              method = "lm", 
+              color = "blue", 
+              linewidth = 0.75) +
+  xlab("Temperature (c)") +
+  ylab("pco2 (in-situ)") +
+  theme_classic()
+``` 
+
+
+Millero10 v Millero10
+```{r, echo=FALSE}
+ggplot() +
+  geom_smooth(data = baysysmillero2010carb, 
+              aes(x = t, y = p_co2insitu),
+              method = "lm", 
+              color = "red", 
+              linewidth = 0.75) +
+  geom_smooth(data = baysysmillero2010sys, 
+              aes(x = t_c, y = p_co2_out_matm),
+              method = "lm", 
+              color = "blue", 
+              linewidth = 0.75) +
+  xlab("Temperature (c)") +
+  ylab("pco2 (in-situ)") +
+  theme_classic()
+``` 
+
+
+Everything
+```{r, echo=FALSE}
+ggplot() +
+  geom_smooth(data = baysysluekercarb, 
+              aes(x = t, y = p_co2insitu, color = "BaySys lueker Carb"),
+              method = "lm", 
+              se = FALSE,
+              linewidth = 0.75) +
+  geom_smooth(data = baysysluekersys, 
+              aes(x = t_c, y = p_co2_out_matm, color = "BaySys lueker Sys"),
+              method = "lm", 
+              se = FALSE, 
+              linewidth = 0.75) +
+  geom_smooth(data = baysysmillero2010carb, 
+              aes(x = t, y = p_co2insitu, color = "BaySys Miller 2010 Carb"),
+              method = "lm",
+              se = FALSE,
+              linewidth = 0.75) +
+  geom_smooth(data = baysysmillero2010sys, 
+              aes(x = t_c, y = p_co2_out_matm, color = "BaySys Miller 2010 Sys"),
+              method = "lm", 
+              se = FALSE,
+              linewidth = 0.75) +
+  xlab("Temperature (c)") +
+  ylab("pco2 (in-situ)") +
+  scale_color_manual(values = c("red", "blue", "green", "orange"),
+                     labels = c("BaySys lueker Carb", "BaySys lueker Sys", "BaySys Miller 2010 Carb", "BaySys Miller 2010 Sys")) +
+  theme_classic()
+``` 

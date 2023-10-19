@@ -1,0 +1,129 @@
+---
+title: "CO2Sys constant compairason"
+author: "Nick Decker"
+date: "2023-10-19"
+output: 
+  html_document
+---
+
+r setup
+```{r setup, include= FALSE}
+library(tidyverse)
+library(seacarb)
+library(janitor)
+library(here)
+library(readxl)
+library(writexl)
+library(knitr)
+library(ggplot2)
+```
+
+load data
+```{r message=FALSE, warning=FALSE}
+baysyslueker <- read_xlsx(here("BaySys Data/cleaned_baysys_data.xlsx"), sheet = "co2sys_l") %>% 
+  clean_names() 
+
+baysysmillero2010 <- read_xlsx(here("BaySys Data/cleaned_baysys_data.xlsx"), sheet = "co2sys_m10") %>% 
+  clean_names()
+
+```
+
+
+Temperature
+
+
+Lueker et al. (2000)
+```{r echo= FALSE, message=FALSE, warning=FALSE}
+baysyslueker %>% 
+  filter(t_c <= 10, p_co2_out_matm <= 2000) %>% 
+  ggplot(aes(x = t_c, y = p_co2_out_matm)) +
+  geom_smooth(method = "lm", colour = "red", linewidth = 0.75) +
+  geom_point() +
+  xlab("Temperature (c)") +
+  ylab("pco2 (in-situ)") +
+  theme_classic()
+```
+
+
+Millero et al. (2010)
+```{r echo= FALSE, message=FALSE, warning=FALSE}
+baysysmillero2010 %>% 
+  filter(t_c <= 10, p_co2_out_matm <= 2000) %>% 
+  
+  ggplot(aes( x = t_c, y = p_co2_out_matm)) +
+  geom_smooth(method = "lm", colour = "blue", linewidth = 0.75) +
+  geom_point() +
+  xlab("Temperature (c)") +
+  ylab("pco2 (in-situ)") +
+  theme_classic()
+```
+
+
+The calculated data from each instance on the same chart
+```{r echo= FALSE, message=FALSE, warning=FALSE}
+baysyslueker_filtered <- baysyslueker %>%
+  filter(t_c <= 10, p_co2_out_matm <= 2000)
+
+baysysmillero2010_filtered <- baysysmillero2010 %>%
+  filter(t_c <= 10, p_co2_out_matm <= 2000)
+
+ggplot() +
+  geom_smooth(data = baysyslueker_filtered, 
+              aes(x = t_c, y = p_co2_out_matm),
+              method = "lm", 
+              color = "red", 
+              linewidth = 0.75) +
+  geom_smooth(data = baysysmillero2010_filtered, 
+              aes(x = t_c, y = p_co2_out_matm),
+              method = "lm", 
+              color = "blue", 
+              linewidth = 0.75) +
+  xlab("Temperature (c)") +
+  ylab("pco2 (in-situ)") +
+  theme_classic()
+```
+
+
+Salinity
+
+
+Lueker et al. (2000)
+```{r echo= FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+baysyslueker %>% 
+  ggplot(aes(x = s, y = p_co2_out_matm)) +
+  geom_smooth(method = "lm", colour = "red", linewidth = 0.75) +
+  geom_point() +
+  xlab("Salinity (psu)") +
+  ylab("pco2 (in-situ)") +
+  theme_classic()
+```
+
+
+Millero et al. (2010)
+```{r echo= FALSE, message=FALSE, warning=FALSE}
+baysysmillero2010 %>% 
+  ggplot(aes(x = s, y = p_co2_out_matm)) +
+  geom_smooth(method = "lm", colour = "blue", linewidth = 0.75) +
+  geom_point() +
+  xlab("Salinity (psu)") +
+  ylab("pco2 (in-situ)") +
+  theme_classic()
+```
+
+
+The calculated data from each instance on the same chart
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot() +
+  geom_smooth(data = baysyslueker, 
+              aes(x = s, y = p_co2_out_matm),
+              method = "lm", 
+              color = "red") +
+  geom_smooth(data = baysysmillero2010, 
+              aes(x = s, y = p_co2_out_matm),
+              method = "lm", 
+              color = "blue") +
+  xlab("Salinity (psu)") +
+  ylab("pco2 (in-situ)") +
+  theme_classic() 
+```
+
