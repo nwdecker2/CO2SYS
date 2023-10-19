@@ -58,39 +58,6 @@ baysysleuker %>%
   theme_classic()
 ```
 
-Millero et al. (2006)
-```{r, echo = FALSE}
-baysysmillero2006 <- carb(flag = "15",
-                    cleaned_baysys_data$var1,
-                    cleaned_baysys_data$var2,
-                    cleaned_baysys_data$s,
-                    cleaned_baysys_data$t,
-                    (cleaned_baysys_data$Patm)/101.3, # divided by 101.3 for unit conversion
-                    (cleaned_baysys_data$p)/1000, # divided by 1000 for unit conversion
-                    Pt=0,
-                    Sit=0,
-                    k1k2 = "m06", # K1 and K2 from Millero et al. (2006)
-                    kf="dg", # Dickson and Riley (1979)
-                    ks="d", # Dickson (1990)
-                    pHscale="T", # Total Scale
-                    b="l10", # Lee et al. (2010)
-                    warn="n", # Shows warnings if T or S are out of range
-                    eos="teos10", 
-                    cleaned_baysys_data$long,
-                    cleaned_baysys_data$lat) %>% 
-  mutate(sid = cleaned_baysys_data$sid) %>% 
-  select(sid, everything()) %>% 
-  select(everything(), -flag) %>% 
-  clean_names()
-
-baysysmillero2006 %>% 
-  ggplot(aes(x = t, y = p_co2insitu)) +
-  geom_smooth(method = "lm", colour = "orange", linewidth = 0.75) +
-  geom_point() +
-  xlab("Temperature (c)") +
-  ylab("pco2 (in-situ)") +
-  theme_classic()
-```
 
 Millero et al. (2010)
 ```{r, echo = FALSE}
@@ -126,107 +93,8 @@ baysysmillero2010 %>%
   theme_classic()
 ```
 
-Mojica Prieto et al. (2002)
-```{r, echo = FALSE}
-baysysprieto <- carb(flag = "15",
-                    cleaned_baysys_data$var1,
-                    cleaned_baysys_data$var2,
-                    cleaned_baysys_data$s,
-                    cleaned_baysys_data$t,
-                    (cleaned_baysys_data$Patm)/101.3, # divided by 101.3 for unit conversion
-                    (cleaned_baysys_data$p)/10, # divided by 10 for unit conversion
-                    Pt=0,
-                    Sit=0,
-                    k1k2 = "mp2", # K1 and K2 from Mojica Prieto et al. (2002)
-                    kf="dg", # Dickson and Riley (1979)
-                    ks="d", # Dickson (1990)
-                    pHscale="T", # Total Scale
-                    b="l10", # Lee et al. (2010)
-                    warn="n", # Shows warnings if T or S are out of range
-                    eos="teos10", 
-                    cleaned_baysys_data$long,
-                    cleaned_baysys_data$lat) %>% 
-  mutate(sid = cleaned_baysys_data$sid) %>% 
-  select(sid, everything()) %>% 
-  select(everything(), -flag) %>% 
-  clean_names()
 
-baysysprieto %>% 
-  ggplot(aes(x = t, y = p_co2insitu)) +
-  geom_smooth(method = "lm", colour = "green", linewidth = 0.75) +
-  geom_point() +
-  xlab("Temperature (c)") +
-  ylab("pco2 (in-situ)") +
-  theme_classic()
-```
 
-Roy et al. (1993)
-```{r, echo = FALSE}
-baysysroy <- carb(flag = "15",
-                    cleaned_baysys_data$var1,
-                    cleaned_baysys_data$var2,
-                    cleaned_baysys_data$s,
-                    cleaned_baysys_data$t,
-                    (cleaned_baysys_data$Patm)/101.3, # divided by 101.3 for unit conversion
-                    (cleaned_baysys_data$p)/10, # divided by 10 for unit conversion
-                    Pt=0,
-                    Sit=0,
-                    k1k2 = "r", # K1 and K2 from Roy et al. (1993)
-                    kf="dg", # Dickson and Riley (1979)
-                    ks="d", # Dickson (1990)
-                    pHscale="T", # Total Scale
-                    b="l10", # Lee et al. (2010)
-                    warn="n", # Shows warnings if T or S are out of range
-                    eos="teos10", 
-                    cleaned_baysys_data$long,
-                    cleaned_baysys_data$lat) %>% 
-  mutate(sid = cleaned_baysys_data$sid) %>% 
-  select(sid, everything()) %>% 
-  select(everything(), -flag) %>% 
-  clean_names()
-
-baysysroy %>% 
-  ggplot(aes(x = t, y = p_co2insitu)) +
-  geom_smooth(method = "lm", colour = "blue", linewidth = 0.75) +
-  geom_point() +
-  xlab("Temperature (c)") +
-  ylab("pco2 (in-situ)") +
-  theme_classic()
-```
-
-Waters et al. (2014)
-```{r, echo = FALSE}
-baysyswaters <- carb(flag = "15",
-                    cleaned_baysys_data$var1,
-                    cleaned_baysys_data$var2,
-                    cleaned_baysys_data$s,
-                    cleaned_baysys_data$t,
-                    (cleaned_baysys_data$Patm)/101.3, # divided by 101.3 for unit conversion
-                    (cleaned_baysys_data$p)/10, # divided by 10 for unit conversion
-                    Pt=0,
-                    Sit=0,
-                    k1k2 = "w14", # K1 and K2 from Waters et al. (2014)
-                    kf="dg", # Dickson and Riley (1979)
-                    ks="d", # Dickson (1990)
-                    pHscale="T", # Total Scale
-                    b="l10", # Lee et al. (2010)
-                    warn="n", # Shows warnings if T or S are out of range
-                    eos="teos10", 
-                    cleaned_baysys_data$long,
-                    cleaned_baysys_data$lat) %>% 
-  mutate(sid = cleaned_baysys_data$sid) %>% 
-  select(sid, everything()) %>% 
-  select(everything(), -flag) %>% 
-  clean_names()
-
-baysyswaters %>% 
-  ggplot(aes(x = t, y = p_co2insitu)) +
-  geom_smooth(method = "lm", colour = "purple", linewidth = 0.75) +
-  geom_point() +
-  xlab("Temperature (c)") +
-  ylab("pco2 (in-situ)") +
-  theme_classic()
-```
 
 The calculated data from each instance on the same chart
 ```{r, echo = FALSE}
@@ -236,30 +104,10 @@ ggplot() +
               method = "lm", 
               color = "red", 
               linewidth = 0.75) +
-  geom_smooth(data = baysysmillero2006, 
-              aes(x = t, y = p_co2insitu),
-              method = "lm", 
-              color = "orange", 
-              linewidth = 0.75) +  
   geom_smooth(data = baysysmillero2010, 
               aes(x = t, y = p_co2insitu),
               method = "lm", 
-              color = "yellow", 
-              linewidth = 0.75) +
-  geom_smooth(data = baysysprieto, 
-              aes(x = t, y = p_co2insitu),
-              method = "lm", 
-              color = "green", 
-              linewidth = 0.75) +  
-  geom_smooth(data = baysysroy, 
-              aes(x = t, y = p_co2insitu),
-              method = "lm", 
               color = "blue", 
-              linewidth = 0.75) +
-  geom_smooth(data = baysyswaters, 
-              aes(x = t, y = p_co2insitu),
-              method = "lm", 
-              color = "purple", 
               linewidth = 0.75) +
   xlab("Temperature (c)") +
   ylab("pco2 (in-situ)") +
