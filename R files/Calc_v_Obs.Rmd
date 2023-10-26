@@ -1,0 +1,19 @@
+---
+title: "Calc_v_Obs"
+author: "Nick Decker"
+date: "2023-10-26"
+output: 
+  html_document
+---
+
+r setup
+```{r setup, include= FALSE}
+library(tidyverse)
+library(seacarb)
+library(janitor)
+library(here)
+library(readxl)
+library(writexl)
+library(knitr)
+library(ggplot2)
+```
