@@ -50,7 +50,7 @@ baysysluekercarb <- carb(flag = "15",
                     pHscale="T", # Total Scale
                     b="l10", # Lee et al. (2010)
                     warn="n", # Shows warnings if T or S are out of range
-                    eos="eos80", 
+                    eos="teos10", 
                     cleaned_baysys_data$long,
                     cleaned_baysys_data$lat) %>% 
   mutate(sid = cleaned_baysys_data$sid) %>% 
