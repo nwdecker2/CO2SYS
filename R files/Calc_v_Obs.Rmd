@@ -8,6 +8,7 @@ output:
 
 r setup
 ```{r setup, include= FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(seacarb)
 library(janitor)
@@ -16,4 +17,58 @@ library(readxl)
 library(writexl)
 library(knitr)
 library(ggplot2)
+library(geosphere)
+library(lubridate)
 ```
+
+```{r load data, warning=FALSE, include=FALSE}
+syslueker <- read_xlsx(here("BaySys Data/cleaned_baysys_data.xlsx"), 
+                       sheet = "co2sys_l") %>% 
+  clean_names() %>% 
+  mutate(date_time = as.POSIXct(date_time))%>% 
+  mutate(date_time.x = date_time)  %>%
+  mutate(date_time.x = with_tz(date_time.x, tz = "UTC"))
+
+sysmillero2010 <- read_xlsx(here("BaySys Data/cleaned_baysys_data.xlsx"), 
+                            sheet = "co2sys_m10") %>% 
+  clean_names()
+
+pco2 <- read_xlsx(here("BaySys Data/underwaypco2.xlsx"), 
+                       sheet = "Working") %>% 
+  clean_names() %>% 
+  mutate(date_time = as.POSIXct(date_time)) %>% 
+  mutate(date_time.y = date_time) %>% 
+  mutate(date_time.y = with_tz(date_time.y, tz = "UTC"))
+```
+
+```{r combine data, include=FALSE}
+# Create an empty dataframe to store the merged results
+merged_df <- data.frame()
+
+# Merge based on closest times
+for (i in 1:nrow(syslueker)) {
+  closest_index <- which.min(abs(pco2$date_time - syslueker$date_time[i]))
+  closest_row <- pco2[closest_index, ]
+  merged_row <- cbind(syslueker[i, ], closest_row)
+  merged_df <- rbind(merged_df, merged_row)
+}
+
+combine_data <- merged_df %>% 
+  select(t_c, p_dbar, p_h, p_co2_out_matm, s, long, lat, date_time.x, 
+         date_time.y, latitude, longitude, tsw, p_co2sw)
+
+```
+
+
+```{r graphs, echo=FALSE}
+combine_data %>% 
+  filter(p_dbar <= 2) %>% 
+  ggplot() +
+  geom_smooth(aes(x= p_dbar, y= p_co2_out_matm), colour = "red")+
+  geom_smooth(aes(x= p_dbar, y= p_co2sw), colour = "blue")+
+  theme_classic()
+```
+
+
+```
+

@@ -49,7 +49,8 @@ cleaned_baysys_data <- baysys_total %>%
          atmospheric_pressure,
          press_db,
          longitude...4,
-         latitude...5) %>% 
+         latitude...5, 
+         date_time) %>% 
   rename(long = longitude...4) %>% 
   rename(lat = latitude...5) %>%
   rename(var1 = ta) %>% 
@@ -57,12 +58,12 @@ cleaned_baysys_data <- baysys_total %>%
   rename(Patm = atmospheric_pressure) %>% 
   rename(p = press_db) %>% 
   rename(t = temp_deg_c) %>% 
-  mutate(across(-sid, as.numeric)) %>% 
+  mutate(across(-c(sid, date_time), as.numeric)) %>% 
   mutate(s = ifelse(!is.na(sal_psu), sal_psu, salinity_average)) %>% 
   drop_na(var1, var2, t, s, Patm) %>% 
   mutate(sal_psu = NULL) %>% 
   mutate(salinity_average = NULL) %>% 
-  write_xlsx(path = here("BaySys Data/cleaned_baysys_data.xlsx"))
+  write_xlsx(path = here("BaySys Data/cleaned_baysys_data_wdates.xlsx"))
 
 # Temp Range: -1.8 - 22
 # S Range: 0 - 34.6
