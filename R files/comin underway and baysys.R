@@ -13,7 +13,7 @@ underway <- read_xlsx(here("BaySys Data/underwaypco2.xlsx"),
   mutate(across(c('lat', 'long'), round, 2))
 
 baysysdata <- read_xlsx(here("BaySys Data/cleaned_baysys_data.xlsx"),
-                        sheet = "co2sys_l") %>% 
+                        sheet = "co2sys_m10") %>% 
   mutate(across(c('lat', 'long'), round, 2))
   
 # First, filter rows from underway based on lat and long in baysysdata
@@ -29,5 +29,4 @@ avg_pco2sw <- filtered_uw %>%
 result <- baysysdata %>%
   left_join(avg_pco2sw, by = c("lat", "long"))
 
-write_xlsx(result, here("Output Files/baysys_w_uw.xlsx"))
-
+write_xlsx(result, here("Output Files/baysys_combined_m10.xlsx"))
